@@ -1,0 +1,22 @@
+.container {
+    display: flex; /* Utilisation de Flexbox */
+    grid-template-columns: 1fr 2fr 1fr; /* Divise l'espace en trois colonnes */
+    grid-gap: 20px; /* Espacement entre les divs */
+}
+
+
+.LeftDiv {
+    background-color: #e0f7fa;
+}
+
+.MiddleDiv {
+    background-color: #607d8b;
+}
+
+.RightDiv {
+    background-color: #FFFFFF;
+}
+body {
+    margin: 0; /* Assurez-vous qu'il n'y a pas de marges autour de la page */
+    width: 100%; /* La page occupe toute la largeur disponible */
+}
