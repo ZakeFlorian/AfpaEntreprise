@@ -1,7 +1,7 @@
 <?php
-// empêche l'accès à la page home si l'utilisateur n'est pas connecté et vérifie si la session n'est pas déjà active
-session_start();
 
+session_start();
+// empêche l'accès à la page home si l'utilisateur n'est pas connecté et vérifie si la session n'est pas déjà active
 if(!isset($_SESSION['user'])){
     header('Location: controller-signin.php');
     exit();
@@ -14,17 +14,17 @@ require_once '../config.php';
 // models
 require_once '../models/Entreprise.php';
 
-// Récupère le pseudo de l'entreprise'
-$nom = isset($_SESSION['entreprise']['name_entreprise']) ? $_SESSION['entreprise']['name_entreprise'] : "Nom d'entreprise non défini";
-$siret = isset($_SESSION['entreprise']['siretnumber_entreprise']) ? ($_SESSION['entreprise']['siretnumber_entreprise']) : "Siret non défini";
-$email = isset($_SESSION['entreprise']['email_entreprise']) ? ($_SESSION['entreprise']['email_entreprise']) : "Email non défini";
-$adresse = isset($_SESSION['entreprise']['adresse_entreprise']) ? ($_SESSION['entreprise']['adresse_entreprise']) : "Adresse non définie";
-$code_postal = isset($_SESSION['entreprise']['zipcode_entreprise']) ? ($_SESSION['entreprise']['zipcode_entreprise']) : "Code postal non défini";
-$ville = isset($_SESSION['entreprise']['city_entreprise']) ? ($_SESSION['entreprise']['city_entreprise']) : "Ville non définie";
-// Vérifie si une photo d'entreprise est définie dans la session
-if (isset($_SESSION['entreprise']['Image_entreprise']) && !empty($_SESSION['entreprise']['Image_entreprise'])) {
-    // Utilise la photo de l'entreprise s'il en existe une
-    $img = $_SESSION['entreprise']['Image_entreprise'];
+// Récupère le pseudo de l'user'
+$nom = isset($_SESSION['user']['name_entreprise']) ? $_SESSION['user']['name_entreprise'] : "Nom d'entreprise non défini";
+$siret = isset($_SESSION['user']['siretnumber_entreprise']) ? ($_SESSION['user']['siretnumber_entreprise']) : "Siret non défini";
+$email = isset($_SESSION['user']['email_entreprise']) ? ($_SESSION['user']['email_entreprise']) : "Email non défini";
+$adresse = isset($_SESSION['user']['adresse_entreprise']) ? ($_SESSION['user']['adresse_entreprise']) : "Adresse non définie";
+$code_postal = isset($_SESSION['user']['zipcode_entreprise']) ? ($_SESSION['user']['zipcode_entreprise']) : "Code postal non défini";
+$ville = isset($_SESSION['user']['city_entreprise']) ? ($_SESSION['user']['city_entreprise']) : "Ville non définie";
+// Vérifie si une photo d'user est définie dans la session
+if (isset($_SESSION['user']['Image_entreprise']) && !empty($_SESSION['user']['Image_entreprise'])) {
+    // Utilise la photo de l'user s'il en existe une
+    $img = $_SESSION['user']['Image_entreprise'];
 } else {
     // Utilise une photo par défaut si aucune photo d'entreprise n'est définie
     $img = "../assets/img/joyboy.jpg";
@@ -32,7 +32,7 @@ if (isset($_SESSION['entreprise']['Image_entreprise']) && !empty($_SESSION['entr
 // Supprimer le profil entreprise
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_profile'])) {
     // Appelle la méthode pour supprimer le profil
-    $delete_result = Entreprise::deleteEnterprise($idEntreprise);
+    $delete_result = Entreprise::deleteEntreprise($idEntreprise);
 
     if ($delete_result === true) {
         // Suppression réussie, redirigez vers la page d'accueil avec un message de succès
@@ -43,9 +43,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_profile'])) {
         exit();
     }
 }
-$allUtilisateurs = Entreprise::getAllUsers($_SESSION['entreprise']['ID_Entreprise']);
-$actifUtilisateurs = Entreprise::getActifUtilisateurs($_SESSION['entreprise']['ID_Entreprise']);
-$allTrajets = Entreprise::getAllTrajets($_SESSION['entreprise']['ID_Entreprise']);
-$lastfiveusers = Entreprise::getlastfiveusers($_SESSION['entreprise']['ID_Entreprise']);
-$lastfivejourneys = Entreprise::getlastfivejourneys($_SESSION['entreprise']['ID_Entreprise']);
+$allUtilisateurs = Entreprise::getAllUsers($_SESSION['user']['ID_Entreprise']);
+$actifUtilisateurs = Entreprise::getActifUtilisateurs($_SESSION['user']['ID_Entreprise']);
+$allTrajets = Entreprise::getAllTrajets($_SESSION['user']['ID_Entreprise']);
+$lastfiveusers = Entreprise::getLastFiveUsers($_SESSION['user']['ID_Entreprise']);
+$lastfivetrajet = Entreprise::getLastFiveTrajet($_SESSION['user']['ID_Entreprise']);
 include_once '../views/view-dashboard.php';

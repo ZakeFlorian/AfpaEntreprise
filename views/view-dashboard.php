@@ -52,10 +52,11 @@
                 <p class="black-text"><span
                             class="styleProfil indigo-text text-darken-4">Ville: </span> <?= $ville ?></p>
             </div>
+
             <div class="contnair">
                 <button class="hoverable" id="editDescriptionBtn">Modifier le profil</button>
                 <form action="../controllers/controller-dashboard.php" method="post" class="deleteProfil">
-                    <input type="hidden" name="delete_profile" value="<?= $enterprise_id ?>">
+                    <input type="hidden" name="delete_profile" value="<?= $idEntreprise ?>">
                     <button class="delete_profile hoverable" type="submit" name="delete_profile"
                             onclick="return confirm('Voulez-vous vraiment supprimer ce profil ?')">Supprimer le profil
                     </button>
@@ -71,31 +72,31 @@
                 <input type="text" name="enterprise_name" placeholder="Nouveau nom" value="<?= $nom ?>">
                 <!-- Affichage des erreurs pour le nom -->
                 <?php if (isset($errors['enterprise_name'])) { ?>
-                    <span class="error-message"><?= $errors['enterprise_name']; ?></span>
+                    <span class="error-message"><?= $errors['name']; ?></span>
                 <?php } ?>
                 <p><span class="styleProfil">Email:</span></p>
-                <input type="text" name="enterprise_email" placeholder="Nouveau email" value="<?= $email ?>">
+                <input type="text" name="mail" placeholder="Nouveau email" value="<?= $email ?>">
                 <!-- Affichage des erreurs pour l'email -->
-                <?php if (isset($errors['enterprise_email'])) { ?>
-                    <span class="error-message"><?= $errors['enterprise_email']; ?></span>
+                <?php if (isset($errors['mail'])) { ?>
+                    <span class="error-message"><?= $errors['mail']; ?></span>
                 <?php } ?>
                 <p><span class="styleProfil"> Adresse:</span></p>
-                <input type="text" name="enterprise_adress" placeholder="Nouveau nom" value="<?= $adresse ?>">
+                <input type="text" name="adress" placeholder="Nouveau nom" value="<?= $adresse ?>">
                 <!-- Affichage des erreurs pour l'adresse -->
-                <?php if (isset($errors['enterprise_adress'])) { ?>
-                    <span class="error-message"><?= $errors['enterprise_adress']; ?></span>
+                <?php if (isset($errors['adress'])) { ?>
+                    <span class="error-message"><?= $errors['adress']; ?></span>
                 <?php } ?>
                 <p><span class="styleProfil"> Code postal:</span></p>
-                <input type="text" name="enterprise_zipcode" placeholder="Nouveau nom" value="<?= $code_postal ?>">
+                <input type="text" name="zipcode" placeholder="Nouveau nom" value="<?= $code_postal ?>">
                 <!-- Affichage des erreurs pour le code postal -->
-                <?php if (isset($errors['enterprise_zipcode'])) { ?>
-                    <span class="error-message"><?= $errors['enterprise_zipcode']; ?></span>
+                <?php if (isset($errors['zipcode'])) { ?>
+                    <span class="error-message"><?= $errors['zipcode']; ?></span>
                 <?php } ?>
                 <p><span class="styleProfil"> Ville:</span></p>
-                <input type="text" name="enterprise_city" placeholder="Nouveau nom" value="<?= $ville ?>">
+                <input type="text" name="city" placeholder="Nouveau nom" value="<?= $ville ?>">
                 <!-- Affichage des erreurs pour le code postal -->
-                <?php if (isset($errors['enterprise_city'])) { ?>
-                    <span class="error-message"><?= $errors['enterprise_city']; ?></span>
+                <?php if (isset($errors['city'])) { ?>
+                    <span class="error-message"><?= $errors['city']; ?></span>
                 <?php } ?>
                 <div class="profile-info">
                     <input type="submit" name="save_modification" value="Enregistrer" class="file-input-button">
@@ -168,12 +169,12 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <?php foreach ($lastfivejourneys as $trajet) : ?>
+                                                <?php foreach ($lastfivetrajet as $trajet) : ?>
                                                     <tr>
-                                                        <td><?= $trajet['ride_date'] ?></td>
-                                                        <td><?= $trajet['user_pseudo'] ?></td>
-                                                        <td><?= $trajet['transport_type'] ?></td>
-                                                        <td><?= $trajet['ride_distance'] ?> kms</td>
+                                                        <td><?= $trajet['date_trajet'] ?></td>
+                                                        <td><?= $trajet['nickname_utilisateur'] ?></td>
+                                                        <td><?= $trajet['Type_modedetransport'] ?></td>
+                                                        <td><?= $trajet['distance_trajet'] ?> kms</td>
                                                     </tr>
                                                 <?php endforeach; ?>
                                                 </tbody>
@@ -194,9 +195,9 @@
                         <div class="card-metric">
                             <?php foreach ($lastfiveusers as $user) : ?>
                                 <div class="user-profile">
-                                    <img src="http://metro_boulot_dodo.test/assets/uploads/<?= $user['user_photo'] ?>"
+                                    <img src="/<?= $user['Image_utilisateur'] ?>"
                                          alt="User Photo">
-                                    <p><?= $user['user_pseudo'] ?></p>
+                                    <p><?= $user['Image_utilisateur'] ?></p>
                                 </div>
                             <?php endforeach; ?>
                         </div>

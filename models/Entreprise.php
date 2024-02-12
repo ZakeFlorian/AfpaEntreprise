@@ -29,13 +29,13 @@ class Entreprise
 
             // on relie les valeurs à nos marqueurs à l'aide d'un bindValue
             $query->bindValue(':name_entreprise', htmlspecialchars($name), PDO::PARAM_STR);
-            $query->bindValue(':email_entreprise',$mail, PDO::PARAM_STR);
+            $query->bindValue(':email_entreprise', $mail, PDO::PARAM_STR);
             $query->bindValue(':siretnumber_entreprise', $siret, PDO::PARAM_INT);
             $query->bindValue(':adresse_entreprise', $adresse, PDO::PARAM_STR);
             $query->bindValue(':zipcode_entreprise', $zipcode, PDO::PARAM_INT);
             $query->bindValue(':city_entreprise', $city, PDO::PARAM_STR);
             $query->bindValue(':password_entreprise', password_hash($password, PASSWORD_DEFAULT), PDO::PARAM_STR);
-            
+
             $query->execute();
         } catch (PDOException $e) {
             echo $e->getMessage();
@@ -94,7 +94,7 @@ class Entreprise
     public static function getInfos(string $mail): array
     {
         try {
-            
+
             // Création d'un objet $db selon la classe PDO
             $db = new PDO(DBNAME, DBUSER, DBPASSWORD);
 
@@ -128,10 +128,9 @@ class Entreprise
      * 
      * @return array Tableau associatif contenant les infos de l'utilisateur
      */
-    public static function getAllUsers(string $idEntreprise): array
+    public static function getAllUsers(int $idEntreprise): int
     {
         try {
-            
             // Création d'un objet $db selon la classe PDO
             $db = new PDO(DBNAME, DBUSER, DBPASSWORD);
 
@@ -147,15 +146,20 @@ class Entreprise
             // on execute la requête
             $query->execute();
 
-            // on récupère le résultat de la requête dans une variable
-            $result = $query->fetchAll(PDO::FETCH_ASSOC);
-            // on retourne le résultat
-            return $result;
+            
+            // on récupère le nombre d'utilisateurs actifs
+            $count = $query->rowCount();
+
+            // on retourne le nombre d'utilisateurs actifs
+            return $count;
         } catch (PDOException $e) {
+            // En cas d'erreur PDO, affichage du message d'erreur
             echo 'Erreur : ' . $e->getMessage();
+            // Arrêt du script
             die();
         }
     }
+
 
     public static function getActifUtilisateurs(int $idEntreprise): int
     {
@@ -196,7 +200,7 @@ class Entreprise
 
             // stockage de ma requete dans une variable
             $sql = "SELECT count('id_trajet') AS 'Total des trajets' FROM `trajet` 
-        JOIN `utilisateur` ON ride.`id_utilisateur` = utilisateur.`id_utilisateur`
+        JOIN `utilisateur` ON trajet.`id_utilisateur` = utilisateur.`id_utilisateur`
         WHERE `ID_Entreprise` = :ID_Entreprise;";
 
             // je prepare ma requête pour éviter les injections SQL
@@ -255,11 +259,11 @@ class Entreprise
         try {
             $db = new PDO(DBNAME, DBUSER, DBPASSWORD);
 
-            $sql = "SELECT trajet.`ride_date`, trajet.`distance_trajet`, utilisateur.`nickname_utilisateur` , modedetransport.`Type_modedetransport`
+            $sql = "SELECT trajet.`date_trajet`, trajet.`distance_trajet`, utilisateur.`nickname_utilisateur` , modedetransport.`Type_modedetransport`
         FROM `trajet`
         JOIN `utilisateur`  ON trajet.`id_utilisateur` = utilisateur.`id_utilisateur`
-        JOIN `modedetransport` ON trajet.`transport_id` = modedetransport.`id_modedetransport`
-        JOIN `entreprise`  ON userprofil.`ID_Entreprise` = entreprise.`ID_Entreprise`
+        JOIN `modedetransport` ON trajet.`id_modedetransport` = modedetransport.`id_modedetransport`
+        JOIN `entreprise`  ON utilisateur.`ID_Entreprise` = entreprise.`ID_Entreprise`
         WHERE entreprise.`ID_Entreprise` = :ID_Entreprise
         ORDER BY trajet.`date_trajet` DESC 
         LIMIT 5";
@@ -279,7 +283,7 @@ class Entreprise
         }
     }
 
-    public static function deleteEnterprise(int $idEntreprise)
+    public static function deleteEntreprise(int $idEntreprise)
     {
         try {
             $db = new PDO(DBNAME, DBUSER, DBPASSWORD);

@@ -1,5 +1,5 @@
 .container {
-    display: flex; /* Utilisation de Flexbox */
+    display: grid; /* Utilisation de Flexbox */
     grid-template-columns: 1fr 2fr 1fr; /* Divise l'espace en trois colonnes */
     grid-gap: 20px; /* Espacement entre les divs */
 }

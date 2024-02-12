@@ -1,0 +1,11 @@
+# Définir la page personnalisée pour l'erreur 403
+ErrorDocument 403 /views/403.html
+
+# Définir la page personnalisée pour l'erreur 404
+ErrorDocument 404 /views/404.html
+
+# Interdire l'accès au répertoire /controllers/ s'il n'y a rien derrière
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteCond %{REQUEST_URI} ^/controllers/$
+RewriteRule ^ - [F]

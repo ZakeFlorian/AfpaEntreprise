@@ -3,7 +3,7 @@
 require_once '../config.php';
 
 // Inclusion de la classe Enterprise si nécessaire
-require_once __DIR__ . '/../models/Enterprise.php';
+require_once __DIR__ . '/../models/Entreprise.php';
 
 // Démarrage de la session
 session_start();
@@ -18,4 +18,4 @@ session_destroy();
 header("Location: controller-signin.php");
 // Arrêt de l'exécution du script
 exit();
-?>
+
