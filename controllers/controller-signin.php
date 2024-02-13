@@ -12,6 +12,17 @@ require_once '../models/Entreprise.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Initialise un tableau pour stocker les éventuelles erreurs de validation
     $errors = [];
+    // La réponse du CAPTCHA dans controller
+    $captcha_response = $_POST['g-recaptcha-response'];
+
+    // Vérifiez la réponse du CAPTCHA en utilisant l'API de Google
+    $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=6LcSAXEpAAAAADRWMCz2Th4Y8QKpElr_yg1ObHkT&response=" . $captcha_response);
+    $response_keys = json_decode($response, true);
+    if (empty($_POST['g-recaptcha-response'])) {
+        $errors['g-recaptcha-response'] = "Cochez je ne suis pas un robot";
+    } else if ($response_keys["success"]) {
+        // Le CAPTCHA est valide. Traitez le formulaire.
+    }
 
     // Vérifie si des erreurs ont déjà été détectées avant de procéder à d'autres vérifications
     if (empty($errors)) {

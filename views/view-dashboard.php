@@ -20,15 +20,14 @@
     <nav class="cyan lighten-5 black-text">
         <div class="nav-wrapper">
             <a href="../controllers/controller-signout.php" class="right buttonHome2 hoverable black-text">Déconnexion</a>
-            <a href="../controllers/controller-dashboard.php" class="logo-container indigo-text"><?= $nom ?></a>
         </div>
     </nav>
 </header>
 
 
-    <div class="container">
-        <ul class="LeftDiv #e0f7fa cyan lighten-5">
-        <div class=" #607d8b blue-grey">
+    <div class="containerr">
+        <ul class="LeftDiv #1e88e5 blue darken-1">
+
             <div class="profile-image-container">
                 <img src="<?= $img ?>" alt="photo de profil" class="profile-image">
                 <form method="post" action="../controllers/controller-dashboard.php" enctype="multipart/form-data"
@@ -38,31 +37,30 @@
                     <input type="submit" value="Télécharger">
                 </form>
             </div>
-            <div class="profile-info">
-                <p class="black-text"><span
-                            class="styleProfil indigo-text text-darken-4"> Nom:</span> <?= $nom ?></p>
-                <p class="black-text"><span
-                            class="styleProfil indigo-text text-darken-4">Siret: </span> <?= $siret ?></p>
-                <p class="black-text"><span
-                            class="styleProfil indigo-text text-darken-4">Email: </span> <?= $email ?></p>
-                <p class="black-text"><span
-                            class="styleProfil indigo-text text-darken-4">Adresse: </span> <?= $adresse ?></p>
-                <p class="black-text"><span
-                            class="styleProfil indigo-text text-darken-4">Code postal: </span> <?= $code_postal ?></p>
-                <p class="black-text"><span
-                            class="styleProfil indigo-text text-darken-4">Ville: </span> <?= $ville ?></p>
+            <div class="profile-info ">
+                <p class=""><span
+                            class="spanCSS"> Nom:</span> <?= $nom ?></p>
+                <p class=""><span
+                            class="spanCSS">Siret: </span> <?= $siret ?></p>
+                <p class=""><span
+                            class="spanCSS">Email: </span> <?= $email ?></p>
+                <p class=""><span
+                            class="spanCSS">Adresse: </span> <?= $adresse ?></p>
+                <p class=""><span
+                            class="spanCSS">Code postal: </span> <?= $code_postal ?></p>
+                <p class=""><span
+                            class="spanCSS">Ville: </span> <?= $ville ?></p>
             </div>
 
-            <div class="contnair">
+            <!-- <div class="container5">
                 <button class="hoverable" id="editDescriptionBtn">Modifier le profil</button>
                 <form action="../controllers/controller-dashboard.php" method="post" class="deleteProfil">
-                    <input type="hidden" name="delete_profile" value="<?= $idEntreprise ?>">
+                    <input type="hidden" name="delete_profile" value="<?= $delete_result ?>">
                     <button class="delete_profile hoverable" type="submit" name="delete_profile"
                             onclick="return confirm('Voulez-vous vraiment supprimer ce profil ?')">Supprimer le profil
                     </button>
                 </form>
-            </div>
-        </div>
+            </div> -->
 
         <!-- Formulaire de modification du profil (masqué par défaut) -->
         <form method="post" action="/controllers/controller-dashboard.php" class="transparent-form"
@@ -108,55 +106,54 @@
             <div class="MiddleDiv">
                 <div class="masonry row">
                     <div class="col s12 push-s2">
-                        <h2 class="blue-grey-text darken-3">Dashboard <?= $nom ?></h2>
                     </div>
                     <div class="row">
-                        <div class="col l4 m6 s12">
+                        <div class="col s4">
                             <div class="card">
-                                <div class="card-content black-text">
-                                    <span class="card-title center-align">Total des utilisateurs</span>
-                                    <p class="black-text"><?= $allUtilisateurs ?> utilisateur(s)</p>
+                                <div class="titre card-content black-text">
+                                    <span class="card-title center-align">Total des utilisateurs :</span>
+                                    <p class="black-text compteur"><?= $allUtilisateurs ?></p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col l4 m6 s12">
+                        <div class="col s4">
                             <div class="card">
-                                <div class="card-content black-text">
-                                    <span class="card-title center-align">Utilisateurs actifs</span>
-                                    <p class="black-text"><?= $actifUtilisateurs ?> utilisateur(s)</p>
+                                <div class="titre card-content black-text">
+                                    <span class="card-title center-align">Utilisateurs actifs :</span>
+                                    <p class="black-text compteur"><?= $actifUtilisateurs ?></p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col l4 m6 s12">
+                        <div class="col s4">
                             <div class="card">
                                 <div class="card-content black-text">
-                                    <span class="card-title center-align">Total des trajets</span>
-                                    <p class="black-text"><?= $allTrajets ?> trajet(s)</p>
+                                    <span class="titre card-title center-align">Total des trajets :</span>
+                                    <p class="black-text compteur"><?= $allTrajets ?></p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col l4 m6 s12">
+                        <div class="col s6">
                             <div class="card">
                                 <div class="card-content black-text">
-                                    <span class="card-title center-align">Stats hebdomadaire globales</span>
-                                    <p class="black-text">(à venir)</p>
+                                    <span class="titre card-title center-align">Stats hebdomadaire globales</span>
+                                    <p class="black-text compteur">(à venir)</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col l4 m6 s12">
+                        <div class="col s6">
                             <div class="card">
                                 <div class="card-content black-text">
-                                    <span class="card-title center-align">Stats des Moyens de transport</span>
-                                    <p class="black-text">(à venir)</p>
+                                    <span class="titre card-title center-align">Stats des Moyens de transport</span>
+                                    <p class="black-text compteur">(à venir)</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col l8 m6 s12">
+                        <div class="col s12">
                             <div class="card">
                                 <div class="card-content black-text">
-                                    <span class="card-title center-align">5 derniers trajets</span>
+                                    <span class="titre card-title center-align">5 derniers trajets</span>
                                     <div class="card-metric">
                                         <div class="table-container">
                                             <table class="highlight responsive-table">
@@ -189,17 +186,21 @@
             </div>
 
             <div class="RightDiv">
-                <div class="card">
-                    <div class="card-content black-text">
-                        <span class="card-title center-align">5 derniers utilisateurs</span>
-                        <div class="card-metric">
-                            <?php foreach ($lastfiveusers as $user) : ?>
-                                <div class="user-profile">
-                                    <img src="/<?= $user['Image_utilisateur'] ?>"
-                                         alt="User Photo">
-                                    <p><?= $user['Image_utilisateur'] ?></p>
+                <div class="row">
+                    <div class="col s12">
+                        <div class="card">
+                            <div class="card-content black-text">
+                            <span class="titre card-title center-align">5 derniers utilisateurs</span>
+                                <div class="card-metric">
+                                <?php foreach ($lastfiveusers as $user) : ?>
+                                    <div class="user-profile">
+                                        <img src="/<?= $user['Image_utilisateur'] ?>"
+                                             alt="User Photo">
+                                        <p><?= $user['nickname_utilisateur'] ?></p>
+                                    </div>
+                                <?php endforeach; ?>
                                 </div>
-                            <?php endforeach; ?>
+                            </div>
                         </div>
                     </div>
                 </div>

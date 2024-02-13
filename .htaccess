@@ -7,5 +7,10 @@ ErrorDocument 404 /views/404.html
 # Interdire l'accès au répertoire /controllers/ s'il n'y a rien derrière
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} -d
-RewriteCond %{REQUEST_URI} ^/controllers/$
+RewriteCond %{REQUEST_URI} ^/controllers/
+RewriteRule ^ - [F]
+
+# Interdire l'accès au répertoire /views/
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteCond %{REQUEST_URI} ^/views/
 RewriteRule ^ - [F]
