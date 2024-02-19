@@ -1,12 +1,12 @@
 <?php
-// Démarre ou reprend une session existante
-session_start();
-
-// Inclut le fichier de configuration contenant les constantes et configurations globales
 require_once '../config.php';
-
-// Inclut le modèle Entreprise pour interagir avec la base de données
 require_once '../models/Entreprise.php';
+
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 
 // Vérifie si la requête HTTP est de type POST, c'est-à-dire si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -38,12 +38,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors['spanPassword'] = 'Veuillez saisir votre mot de passe';
         } else {
             // Si l'e-mail existe et un mot de passe a été soumis, poursuit les vérifications
-
+            $mail = $_POST['mail'];
             // Récupère les informations de l'utilisateur à partir de l'e-mail soumis
-            $utilisateurInfos = Entreprise::getInfos($_POST['mail']);
-
+            $utilisateurInfos = json_decode(Entreprise::getInfos($mail), true);
+            var_dump($utilisateurInfos);
+            
             // Utilise la fonction password_verify pour valider le mot de passe soumis
-            if (password_verify($_POST['password'], $utilisateurInfos['password_entreprise'])) {
+            if (password_verify($_POST['password'], $utilisateurInfos['data']['password_entreprise'])) {
                 // Si le mot de passe est correct, enregistre les informations de l'utilisateur dans la session
                 $_SESSION['user'] = $utilisateurInfos;
                 // Redirige l'utilisateur vers le tableau de bord après la connexion

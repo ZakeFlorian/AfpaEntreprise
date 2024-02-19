@@ -10,9 +10,11 @@
     <title>Dashboard - Entreprise</title>
     <!-- Materialize CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
-    <!-- Material Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="../assets/css/style.css" rel="stylesheet">
+    <!-- Chart Js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"></script>
 </head>
 
 <body class="#eceff1 blue-grey lighten-5">
@@ -52,7 +54,7 @@
                             class="spanCSS">Ville: </span> <?= $ville ?></p>
             </div>
 
-            <!-- <div class="container5">
+            <div class="container5">
                 <button class="hoverable" id="editDescriptionBtn">Modifier le profil</button>
                 <form action="../controllers/controller-dashboard.php" method="post" class="deleteProfil">
                     <input type="hidden" name="delete_profile" value="<?= $delete_result ?>">
@@ -60,7 +62,7 @@
                             onclick="return confirm('Voulez-vous vraiment supprimer ce profil ?')">Supprimer le profil
                     </button>
                 </form>
-            </div> -->
+            </div>
 
         <!-- Formulaire de modification du profil (masqué par défaut) -->
         <form method="post" action="/controllers/controller-dashboard.php" class="transparent-form"
@@ -146,7 +148,7 @@
                             <div class="card">
                                 <div class="card-content black-text">
                                     <span class="titre card-title center-align">Stats des Moyens de transport</span>
-                                    <p class="black-text compteur">(à venir)</p>
+                                    <canvas id="doughnutChart" width="400" height="400"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -166,7 +168,7 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <?php foreach ($lastfivetrajet as $trajet) : ?>
+                                                <?php foreach ($lastFiveTrajet as $trajet) : ?>
                                                     <tr>
                                                         <td><?= $trajet['date_trajet'] ?></td>
                                                         <td><?= $trajet['nickname_utilisateur'] ?></td>
@@ -192,7 +194,7 @@
                             <div class="card-content black-text">
                             <span class="titre card-title center-align">5 derniers utilisateurs</span>
                                 <div class="card-metric">
-                                <?php foreach ($lastfiveusers as $user) : ?>
+                                <?php foreach ($lastFiveUsers as $user) : ?>
                                     <div class="user-profile">
                                         <img src="/<?= $user['Image_utilisateur'] ?>"
                                              alt="User Photo">
@@ -238,6 +240,70 @@
             document.getElementById('editDescriptionForm').style.display = 'none';
         });
     });
+// Récupérer les données PHP des stats transports dans une variable JavaScript
+var statsTransports = <?php echo json_encode($statsTransports); ?>;
+
+// Initialiser les tableaux pour les données et les couleurs
+var data = [];
+var labels = [];
+var backgroundColors = [];
+var borderColors = [];
+// Générer des couleurs aléatoires
+function generateRandomColor() {
+    var r = Math.floor(Math.random() * 256);
+    var g = Math.floor(Math.random() * 256);
+    var b = Math.floor(Math.random() * 256);
+    return 'rgba(' + r + ',' + g + ',' + b + ')';
+}
+// Itérer à travers les données de transport
+statsTransports.forEach(function(stat) {
+    labels.push(stat.Type_modedetransport); // Modification ici pour utiliser la bonne clé
+    data.push(stat.stats);
+    var randomColor = generateRandomColor();
+    backgroundColors.push(randomColor);
+    borderColors.push(randomColor.replace('0.2', '1'));
+});
+
+// Générer le graphique Doughnut
+var ctx = document.getElementById('doughnutChart').getContext('2d');
+var doughnutChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Nombre de trajets',
+            data: data,
+            backgroundColor: backgroundColors,
+            borderColor: borderColors,
+            borderWidth: 1
+        }]
+    },
+    options: {
+        plugins: {
+            legend: {
+                display: true,
+                labels: {
+                    generateLabels: function(chart) {
+                        var data = chart.data;
+                        if (data.labels.length && data.datasets.length) {
+                            return data.labels.map(function(label, i) {
+                                var ds = data.datasets[0];
+                                return {
+                                    text: label + ': ' + ds.data[i], // Ajouter le nom de transport et la valeur
+                                    fillStyle: ds.backgroundColor[i],
+                                    hidden: isNaN(ds.data[i]),
+                                    lineCap: 'round',
+                                    fontColor: '#080808'
+                                };
+                            });
+                        }
+                        return [];
+                    }
+                }
+            }
+        }
+    }
+});
 
 
 </script>

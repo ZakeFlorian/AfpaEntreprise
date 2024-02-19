@@ -74,89 +74,82 @@ class Entreprise
 
             // on vérifie si le résultat est vide car si c'est le cas, cela veut dire que le mail n'existe pas
             if (empty($result)) {
-                return false;
+                // Si l'email n'existe pas, retourner un JSON avec le statut succès et exists à false
+                return json_encode([
+                    'status' => 'success',
+                    'exists' => false
+                ]);
             } else {
-                return true;
+                // Si l'email existe, retourner un JSON avec le statut succès et exists à true
+                return json_encode([
+                    'status' => 'success',
+                    'exists' => true
+                ]);
             }
         } catch (PDOException $e) {
-            echo 'Erreur : ' . $e->getMessage();
-            die();
+            // En cas d'erreur PDO, retourner un JSON avec le statut erreur et le message d'erreur
+            return json_encode([
+                'status' => 'error',
+                'message' => 'Erreur : ' . $e->getMessage()
+            ]);
         }
     }
 
     /**
-     * Methode permettant de récupérer les infos d'un utilisateur avec son mail comme paramètre
+     * Méthode pour récupérer les informations d'une entreprise basées sur son adresse email
      * 
-     * @param string $mail Adresse mail de l'utilisateur
-     * 
-     * @return array Tableau associatif contenant les infos de l'utilisateur
+     * @param string $email L'adresse email de l'entreprise
+     * @return string JSON contenant les informations de l'entreprise
      */
-    public static function getInfos(string $mail): array
+
+    public static function getInfos(string $mail): string
     {
         try {
-
-            // Création d'un objet $db selon la classe PDO
             $db = new PDO(DBNAME, DBUSER, DBPASSWORD);
-
-            // stockage de ma requete dans une variable
             $sql = "SELECT * FROM `entreprise` WHERE `email_entreprise` = :email_entreprise";
-
-            // je prepare ma requête pour éviter les injections SQL
             $query = $db->prepare($sql);
-
-            // on relie les paramètres à nos marqueurs nominatifs à l'aide d'un bindValue
             $query->bindValue(':email_entreprise', $mail, PDO::PARAM_STR);
-
-            // on execute la requête
             $query->execute();
-
-            // on récupère le résultat de la requête dans une variable
             $result = $query->fetch(PDO::FETCH_ASSOC);
-
-            // on retourne le résultat
-            return $result;
+            return json_encode([
+                'status' => 'success',
+                'data' => $result ?? [] // Si aucun résultat, retourne un tableau vide
+            ]);
         } catch (PDOException $e) {
-            echo 'Erreur : ' . $e->getMessage();
-            die();
+            // En cas d'erreur PDO, retourne un JSON avec le statut erreur et le message d'erreur
+            return json_encode([
+                'status' => 'error',
+                'message' => 'Erreur : ' . $e->getMessage()
+            ]);
         }
     }
 
     /**
      * Methode permettant de récupérer les infos d'un utilisateur avec l'id de l'entreprise comme paramètre
      * 
-     * @param string $idEntreprise Id de l'entreprise
+     * @param int $idEntreprise Id de l'entreprise
      * 
-     * @return array Tableau associatif contenant les infos de l'utilisateur
+     * @return string JSON contenant le nombre total d'utilisateurs
      */
-    public static function getAllUsers(int $idEntreprise): int
+    public static function getAllUsers(int $idEntreprise): string
     {
         try {
-            // Création d'un objet $db selon la classe PDO
             $db = new PDO(DBNAME, DBUSER, DBPASSWORD);
-
-            // stockage de ma requete dans une variable
-            $sql = "SELECT * FROM `entreprise` NATURAL JOIN `utilisateur` WHERE `ID_Entreprise` = :ID_Entreprise; ";
-
-            // je prepare ma requête pour éviter les injections SQL
+            $sql = "SELECT COUNT(*) AS total_users FROM `utilisateur` WHERE `ID_Entreprise` = :ID_Entreprise;";
             $query = $db->prepare($sql);
-
-            // on relie les paramètres à nos marqueurs nominatifs à l'aide d'un bindValue
-            $query->bindValue(':ID_Entreprise', $idEntreprise, PDO::PARAM_STR);
-
-            // on execute la requête
+            $query->bindValue(':ID_Entreprise', $idEntreprise, PDO::PARAM_INT);
             $query->execute();
-
-            
-            // on récupère le nombre d'utilisateurs actifs
-            $count = $query->rowCount();
-
-            // on retourne le nombre d'utilisateurs actifs
-            return $count;
+            $result = $query->fetch(PDO::FETCH_ASSOC);
+            return json_encode([
+                'status' => 'success',
+                'total_users' => $result['total_users']
+            ]);
         } catch (PDOException $e) {
-            // En cas d'erreur PDO, affichage du message d'erreur
-            echo 'Erreur : ' . $e->getMessage();
-            // Arrêt du script
-            die();
+            // En cas d'erreur PDO, retourne un JSON avec le statut erreur et le message d'erreur
+            return json_encode([
+                'status' => 'error',
+                'message' => 'Erreur : ' . $e->getMessage()
+            ]);
         }
     }
 
@@ -164,119 +157,75 @@ class Entreprise
     public static function getActifUtilisateurs(int $idEntreprise): int
     {
         try {
-            // Création d'un objet $db selon la classe PDO
             $db = new PDO(DBNAME, DBUSER, DBPASSWORD);
-
-            // stockage de ma requete dans une variable
             $sql = "SELECT DISTINCT utilisateur.*
-        FROM `utilisateur`
-        JOIN `trajet` ON utilisateur.`id_utilisateur` = trajet.`id_utilisateur`
-        WHERE utilisateur.`ID_Entreprise` = :ID_Entreprise;";
-
-            // je prepare ma requête pour éviter les injections SQL
+                    FROM `utilisateur`
+                    JOIN `trajet` ON utilisateur.`id_utilisateur` = trajet.`id_utilisateur`
+                    WHERE utilisateur.`ID_Entreprise` = :ID_Entreprise;";
             $query = $db->prepare($sql);
-
-            // on relie les paramètres à nos marqueurs nominatifs à l'aide d'un bindValue
             $query->bindValue(':ID_Entreprise', $idEntreprise, PDO::PARAM_INT);
-
-            // on execute la requête
             $query->execute();
-
-            // on récupère le nombre d'utilisateurs actifs
             $count = $query->rowCount();
-
-            // on retourne le nombre d'utilisateurs actifs
-            return $count;
+            return json_encode($count);
         } catch (PDOException $e) {
             echo 'Erreur : ' . $e->getMessage();
             die();
         }
     }
+
     public static function getAllTrajets(int $idEntreprise): int
     {
         try {
-            // Création d'un objet $db selon la classe PDO
             $db = new PDO(DBNAME, DBUSER, DBPASSWORD);
-
-            // stockage de ma requete dans une variable
             $sql = "SELECT count('id_trajet') AS 'Total des trajets' FROM `trajet` 
-        JOIN `utilisateur` ON trajet.`id_utilisateur` = utilisateur.`id_utilisateur`
-        WHERE `ID_Entreprise` = :ID_Entreprise;";
-
-            // je prepare ma requête pour éviter les injections SQL
+                    JOIN `utilisateur` ON trajet.`id_utilisateur` = utilisateur.`id_utilisateur`
+                    WHERE `ID_Entreprise` = :ID_Entreprise;";
             $query = $db->prepare($sql);
-
-            // on relie les paramètres à nos marqueurs nominatifs à l'aide d'un bindValue
             $query->bindValue(':ID_Entreprise', $idEntreprise, PDO::PARAM_INT);
-
-            // on execute la requête
             $query->execute();
-
-            // on récupère le résultat de la requête dans une variable
             $result = $query->fetch(PDO::FETCH_ASSOC);
-
-
-            // on retourne le nom de l'entreprise
-            return $result['Total des trajets'];
+            return json_encode($result['Total des trajets']);
         } catch (PDOException $e) {
             echo 'Erreur : ' . $e->getMessage();
             die();
         }
     }
-    public static function getLastFiveUsers(int $idEntreprise): array
+
+    public static function getLastFiveUsers(int $idEntreprise): string
     {
         try {
-            // Création d'un objet $db selon la classe PDO
             $db = new PDO(DBNAME, DBUSER, DBPASSWORD);
-
-            // stockage de ma requete dans une variable
             $sql = "SELECT `Image_utilisateur`, `nickname_utilisateur` FROM `utilisateur` 
-        WHERE `ID_Entreprise` = :ID_Entreprise
-        ORDER BY `id_utilisateur` DESC LIMIT 5";
-
-            // je prepare ma requête pour éviter les injections SQL
+                    WHERE `ID_Entreprise` = :ID_Entreprise
+                    ORDER BY `id_utilisateur` DESC LIMIT 5";
             $query = $db->prepare($sql);
-
-            // on relie les paramètres à nos marqueurs nominatifs à l'aide d'un bindValue
             $query->bindValue(':ID_Entreprise', $idEntreprise, PDO::PARAM_INT);
-
-            // on execute la requête
             $query->execute();
-
-            // on récupère le résultat de la requête dans une variable
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
-
-            // on retourne le résultat
-            return $result;
+            return json_encode($result);
         } catch (PDOException $e) {
             echo 'Erreur : ' . $e->getMessage();
             die();
         }
     }
 
-    public static function getLastFiveTrajet(int $idEntreprise): array
+    public static function getLastFiveTrajet(int $idEntreprise): string
     {
         try {
             $db = new PDO(DBNAME, DBUSER, DBPASSWORD);
-
             $sql = "SELECT trajet.`date_trajet`, trajet.`distance_trajet`, utilisateur.`nickname_utilisateur` , modedetransport.`Type_modedetransport`
-        FROM `trajet`
-        JOIN `utilisateur`  ON trajet.`id_utilisateur` = utilisateur.`id_utilisateur`
-        JOIN `modedetransport` ON trajet.`id_modedetransport` = modedetransport.`id_modedetransport`
-        JOIN `entreprise`  ON utilisateur.`ID_Entreprise` = entreprise.`ID_Entreprise`
-        WHERE entreprise.`ID_Entreprise` = :ID_Entreprise
-        ORDER BY trajet.`date_trajet` DESC 
-        LIMIT 5";
-
+                    FROM `trajet`
+                    JOIN `utilisateur`  ON trajet.`id_utilisateur` = utilisateur.`id_utilisateur`
+                    JOIN `modedetransport` ON trajet.`id_modedetransport` = modedetransport.`id_modedetransport`
+                    JOIN `entreprise`  ON utilisateur.`ID_Entreprise` = entreprise.`ID_Entreprise`
+                    WHERE entreprise.`ID_Entreprise` = :ID_Entreprise
+                    ORDER BY trajet.`date_trajet` DESC 
+                    LIMIT 5";
             $query = $db->prepare($sql);
             $query->bindValue(':ID_Entreprise', $idEntreprise, PDO::PARAM_INT);
-
             $query->execute();
-
-            // Récupérer tous les résultats
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
-
-            return $result;
+            return json_encode($result);
         } catch (PDOException $e) {
             echo 'Erreur : ' . $e->getMessage();
             die();
@@ -287,23 +236,36 @@ class Entreprise
     {
         try {
             $db = new PDO(DBNAME, DBUSER, DBPASSWORD);
-
             $sql = "DELETE FROM entreprise WHERE ID_Entreprise = :ID_Entreprise";
             $query = $db->prepare($sql);
             $query->bindValue(':ID_Entreprise', $idEntreprise, PDO::PARAM_INT);
             $query->execute();
-
-            // Détruire la session
             session_destroy();
-
-            // Supprimer le mot de passe de la session
             unset($_SESSION['password_entreprise']);
-
             return true;
         } catch (PDOException $e) {
-            // Si une erreur se produit, retourner le message d'erreur
             return 'Erreur : ' . $e->getMessage();
         }
     }
 
-}
+    public static function getTransportStats(int $ID_Entreprise): array
+    {
+        try {
+            $db = new PDO(DBNAME, DBUSER, DBPASSWORD);
+            $sql = "SELECT Type_modedetransport, COUNT(*) as stats FROM `modedetransport` 
+                    NATURAL JOIN `utilisateur`
+                    NATURAL JOIN `entreprise`
+                    NATURAL JOIN `trajet`
+                    where ID_Entreprise = :ID_Entreprise
+                    GROUP BY Type_modedetransport;";
+            $query = $db->prepare($sql);
+            $query->bindValue(':ID_Entreprise', $ID_Entreprise, PDO::PARAM_INT);
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            return ($result);
+        } catch (PDOException $e) {
+            echo 'Erreur : ' . $e->getMessage();
+            die();
+        }
+    }
+    }
