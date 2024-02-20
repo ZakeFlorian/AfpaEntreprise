@@ -14,15 +14,14 @@ require_once '../models/Entreprise.php';
 
 // Récupère les données de l'utilisateur depuis la session
 $userData = $_SESSION['user'];
-
 // Assurez-vous que toutes les clés nécessaires existent dans $userData pour éviter les erreurs
-$nom = $userData['name_entreprise'] ?? "Nom d'entreprise non défini";
-$siret = $userData['siretnumber_entreprise'] ?? "Siret non défini";
-$email = $userData['email_entreprise'] ?? "Email non défini";
-$adresse = $userData['adresse_entreprise'] ?? "Adresse non définie";
-$code_postal = $userData['zipcode_entreprise'] ?? "Code postal non défini";
-$ville = $userData['city_entreprise'] ?? "Ville non définie";
-$img = $userData['Image_entreprise'] ?? "../assets/img/joyboy.jpg";
+$nom = $userData['data']['name_entreprise'] ?? "Nom d'entreprise non défini";
+$siret = $userData['data']['siretnumber_entreprise'] ?? "Siret non défini";
+$email = $userData['data']['email_entreprise'] ?? "Email non défini";
+$adresse = $userData['data']['adresse_entreprise'] ?? "Adresse non définie";
+$code_postal = $userData['data']['zipcode_entreprise'] ?? "Code postal non défini";
+$ville = $userData['data']['city_entreprise'] ?? "Ville non définie";
+$img = $userData['data']['Image_entreprise'] ?? "../assets/img/joyboy.jpg";
 
 // Supprimer le profil de l'entreprise
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_profile'])) {
@@ -39,13 +38,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_profile'])) {
 }
 
 // Récupère les données nécessaires depuis la base de données
-$idEntreprise = $userData['ID_Entreprise'];
+$idEntreprise = $userData['data']['ID_Entreprise'];
 $allUtilisateurs = json_decode(Entreprise::getAllUsers($idEntreprise), true)['total_users'] ?? 0;
 $lastFiveTrajet = json_decode(Entreprise::getLastFiveTrajet($idEntreprise), true);
 $actifUtilisateurs = json_decode(Entreprise::getActifUtilisateurs($idEntreprise), true);
 $allTrajets = json_decode(Entreprise::getAllTrajets($idEntreprise), true);
 $lastFiveUsers = json_decode(Entreprise::getLastFiveUsers($idEntreprise), true);
 $statsTransports = json_decode(Entreprise::getTransportStats($idEntreprise), true);
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (isset($_POST['validate_id'])) {
+        Entreprise::validate($_POST['validate_id']);
+    }
+    if (isset($_POST['unvalidate_id'])) {
+        Entreprise::unvalidate($_POST['unvalidate_id']);
+    }
+}
+$getEveryone = json_decode(Entreprise::getEveryone($idEntreprise), true);
+
+
 
 // Inclut la vue view-dashboard.php pour afficher le tableau de bord
 include_once '../views/view-dashboard.php';

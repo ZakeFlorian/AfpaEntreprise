@@ -14,7 +14,6 @@
     <!-- Chart Js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"></script>
 </head>
 
 <body class="#eceff1 blue-grey lighten-5">
@@ -54,7 +53,7 @@
                             class="spanCSS">Ville: </span> <?= $ville ?></p>
             </div>
 
-            <div class="container5">
+            <!-- <div class="container5">
                 <button class="hoverable" id="editDescriptionBtn">Modifier le profil</button>
                 <form action="../controllers/controller-dashboard.php" method="post" class="deleteProfil">
                     <input type="hidden" name="delete_profile" value="<?= $delete_result ?>">
@@ -62,7 +61,7 @@
                             onclick="return confirm('Voulez-vous vraiment supprimer ce profil ?')">Supprimer le profil
                     </button>
                 </form>
-            </div>
+            </div> -->
 
         <!-- Formulaire de modification du profil (masqué par défaut) -->
         <form method="post" action="/controllers/controller-dashboard.php" class="transparent-form"
@@ -183,6 +182,41 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col s12">
+                            <div class="card">
+                                <div class="card-content black-text">
+                                <span class="titre card-title center-align">Liste des utilisateurs</span>
+                                <div class="card-metric">
+                                        <div class="table-container">
+                                            <table class="highlight responsive-table">
+                                                <thead>
+                                                <tr>
+                                                    <th>Pseudo</th>
+                                                    <th>Switch</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <?php foreach ($getEveryone as $everyone) : ?>
+                                                    <tr>
+                                                        <td><?= $everyone['nickname_utilisateur'] ?></td>
+                                                        <td><div class="switch">
+    <label>
+      Off
+      <input type="checkbox" data-user-id="<?= $everyone['id_utilisateur'] ?>" id="toggleCheckbox" <?= $everyone['user_validate'] == 1 ? "checked" : "" ?>>
+      <span class="lever"></span>
+      On
+    </label>
+  </div></td>
+                                                    </tr>
+                                                <?php endforeach;
+                                                 ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -213,6 +247,7 @@
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const navbarToggle = document.getElementById("navbar-toggle");
@@ -305,7 +340,18 @@ var doughnutChart = new Chart(ctx, {
     }
 });
 
-
+document.addEventListener('click', e=> {
+    if(e.target.type=='checkbox'){
+        if(e.target.checked == false) {
+            console.log('unvalidate')
+            fetch(`controller-ajax.php?unvalidate=${e.target.dataset.userId}`)
+        }else {
+            console.log('validate')
+            fetch(`controller-ajax.php?validate=${e.target.dataset.userId}`)
+        }
+        
+    }
+})
 </script>
 </body>
 

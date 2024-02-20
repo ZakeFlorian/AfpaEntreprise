@@ -248,7 +248,7 @@ class Entreprise
         }
     }
 
-    public static function getTransportStats(int $ID_Entreprise): array
+    public static function getTransportStats(int $idEntreprise): string
     {
         try {
             $db = new PDO(DBNAME, DBUSER, DBPASSWORD);
@@ -259,13 +259,70 @@ class Entreprise
                     where ID_Entreprise = :ID_Entreprise
                     GROUP BY Type_modedetransport;";
             $query = $db->prepare($sql);
-            $query->bindValue(':ID_Entreprise', $ID_Entreprise, PDO::PARAM_INT);
+            $query->bindValue(':ID_Entreprise', $idEntreprise, PDO::PARAM_INT);
             $query->execute();
             $result = $query->fetchAll(PDO::FETCH_ASSOC);
-            return ($result);
+            return json_encode($result);
         } catch (PDOException $e) {
             echo 'Erreur : ' . $e->getMessage();
             die();
         }
     }
+    public static function getEveryone(int $idEntreprise): string
+    {
+        try {
+            $db = new PDO(DBNAME, DBUSER, DBPASSWORD);
+            $sql = "SELECT `Image_utilisateur`, `nickname_utilisateur`, `user_validate`, `id_utilisateur` FROM `utilisateur` 
+                    WHERE `ID_Entreprise` = :ID_Entreprise
+                    ORDER BY `id_utilisateur`";
+            $query = $db->prepare($sql);
+            $query->bindValue(':ID_Entreprise', $idEntreprise, PDO::PARAM_INT);
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_ASSOC);
+            return json_encode($result);
+        } catch (PDOException $e) {
+            echo 'Erreur : ' . $e->getMessage();
+            die();
+        }
     }
+    /**
+     * méthode qui permet de bloquer un utilisateur
+     * @param int $userID ID de l'utilisateur
+     * @return bool
+     */
+    public static function unvalidate(int $userID):bool
+    {
+        try {
+            $db = new PDO(DBNAME, DBUSER, DBPASSWORD);
+            $sql = "UPDATE `utilisateur` SET `user_validate` = 0 WHERE `id_utilisateur` = :id_utilisateur";
+            $query = $db->prepare($sql);
+            $query->bindValue(':id_utilisateur', $userID, PDO::PARAM_INT);
+            $query->execute();
+
+            return true;
+        } catch (PDOException $e) {
+            echo 'Erreur : ' . $e->getMessage();
+            die();
+        }
+    }
+    /**
+     * méthode qui permet de débloquer un utilisateur
+     * @param int $userID ID de l'utilisateur
+     * @return bool
+    */ 
+    public static function validate(int $userID):bool
+    {
+        try {
+            $db = new PDO(DBNAME, DBUSER, DBPASSWORD);
+            $sql = "UPDATE `utilisateur` SET `user_validate` = 1 WHERE `id_utilisateur` = :id_utilisateur";
+            $query = $db->prepare($sql);
+            $query->bindValue(':id_utilisateur', $userID, PDO::PARAM_INT);
+            $query->execute();
+
+            return true;
+        } catch (PDOException $e) {
+            echo 'Erreur : ' . $e->getMessage();
+            die();
+        }
+    }
+}
