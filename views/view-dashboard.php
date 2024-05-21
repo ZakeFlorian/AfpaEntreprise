@@ -26,7 +26,7 @@
 </header>
 
 
-    <div class="containerr">
+    <div class="containerr col l4">
         <ul class="LeftDiv #1e88e5 blue darken-1">
 
             <div class="profile-image-container">

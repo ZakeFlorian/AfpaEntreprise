@@ -17,7 +17,7 @@ require_once "../controllers/controller-signin.php";
 include 'templates/header.php';
 ?>
 
-<body class="">
+<body class="#eceff1 blue-grey lighten-5">
     <h1>Connexion</h1>
     <div class="divFormSignin">
         <form id="signinForm" method="POST" action="" autocomplete="off" novalidate>

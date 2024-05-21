@@ -17,17 +17,17 @@ require_once "../controllers/controller-signup.php";
 include 'templates/header.php';
 ?>
 
-<body class="#c62828 red darken-3 white-text">
+<body class="#eceff1 blue-grey lighten-5 black-text">
     <?php if ($showform) { ?>
     <!-- Affiche le formulaire d'inscription si $showform est vrai -->
-    <h1>Inscription</h1>
+    <h1 class="center-align">Inscription</h1>
 
-    <div class="divFormSignup ">
+    <div class="divFormSignup">
         <form method="POST" action="" enctype="multipart/form-data" autocomplete="off" novalidate>
 
             <!-- Champ pour le nom de l'entreprise -->
             <label class="labelSignup" for="nom">
-                <p>Nom de l'entreprise<sup class="redInput">* </sup>:</p>
+                <p class="black-text">Nom de l'entreprise<sup class="redInput">* </sup>:</p>
 
                 <input class="inputField" type="text" id="nom" name="nom" size="20" placeholder="Gucci" value="<?php if (!empty($name)) {
                         echo $name;
@@ -40,7 +40,7 @@ include 'templates/header.php';
 
             <!-- Champ pour l'adresse e-mail -->
             <label class="labelSignup" for="mail">
-                <p>Adresse mail de l'entreprise<sup class="redInput">* </sup> :</p>
+                <p class="black-text">Adresse mail de l'entreprise<sup class="redInput">* </sup> :</p>
 
                 <input class="inputField" type="text" id="mail" name="mail" size="25" placeholder="Gucci-mail@mail.com"
                     value="<?php if (!empty($mail)) {
@@ -54,7 +54,7 @@ include 'templates/header.php';
 
             <!-- Champ pour le numéro de Siret -->
             <label class="labelSignup" for="siretNumber">
-                <p>Numéro de Siret<sup class="redInput">* </sup> :</p>
+                <p class="black-text">Numéro de Siret<sup class="redInput">* </sup> :</p>
 
                 <input class="inputField" type="text" name="siretNumber" value="<?php if (!empty($siret)) {
         echo $siret;
@@ -67,7 +67,7 @@ include 'templates/header.php';
 
             <!-- Champ pour l'adresse de l'entreprise -->
             <label class="labelSignup" for="adresse">
-                <p>Adresse de l'entreprise<sup class="redInput">* </sup> :</p>
+                <p class="black-text">Adresse de l'entreprise<sup class="redInput">* </sup> :</p>
 
                 <input class="inputField" id="adresse" type="text" name="adresse" size="20" value="<?php if (!empty($adresse)) {
         echo $adresse;
@@ -80,7 +80,7 @@ include 'templates/header.php';
 
             <!-- Champ pour le code postal de l'entreprise -->
             <label class="" for="zipcode">
-                <p>Code Postal de l'entreprise<sup class="redInput">* </sup> :</p>
+                <p class="black-text">Code Postal de l'entreprise<sup class="redInput">* </sup> :</p>
 
                 <input class="inputField" type="text" id="confirmPass" name="zipcode" size="20" required>
                 <!-- Affiche un message d'erreur s'il y a une erreur associée au champ code postal -->
@@ -91,7 +91,7 @@ include 'templates/header.php';
 
             <!-- Champ pour la ville de l'entreprise -->
             <label class="" for="city">
-                <p>Ville de l'entreprise<sup class="redInput">* </sup> :</p>
+                <p class="black-text">Ville de l'entreprise<sup class="redInput">* </sup> :</p>
 
                 <input class="inputField" type="text" id="confirmPass" name="city" size="20" required>
                 <!-- Affiche un message d'erreur s'il y a une erreur associée au champ ville -->
@@ -102,7 +102,7 @@ include 'templates/header.php';
 
             <!-- Champ pour le mot de passe -->
             <label class="labelSignup" for="password">
-                <p>Mot de passe<sup class="redInput">* </sup> :</p>
+                <p class="black-text">Mot de passe<sup class="redInput">* </sup> :</p>
 
                 <input class="inputField" type="password" id="password" name="password" size="20" required>
                 <!-- Affiche un message d'erreur s'il y a une erreur associée au champ mot de passe -->
@@ -113,7 +113,7 @@ include 'templates/header.php';
 
             <!-- Champ pour la confirmation du mot de passe -->
             <label class="labelSignup" for="confirmPass">
-                <p>Confirmation du mot de passe<sup class="redInput">* </sup> :</p>
+                <p class="black-text">Confirmation du mot de passe<sup class="redInput">* </sup> :</p>
 
                 <input class="inputField" type="password" id="confirmPass" name="confirmPass" size="20" required>
                 <!-- Affiche un message d'erreur s'il y a une erreur associée au champ confirmation du mot de passe -->
