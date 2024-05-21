@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : lun. 22 jan. 2024 à 14:58
+-- Généré le : mar. 21 mai 2024 à 19:52
 -- Version du serveur : 8.0.30
 -- Version de PHP : 8.1.10
 
@@ -86,7 +86,7 @@ CREATE TABLE `entreprise` (
   `ID_Entreprise` int NOT NULL,
   `name_entreprise` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `email_entreprise` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `password_entreprise` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `password_entreprise` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `siretnumber_entreprise` varchar(14) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `adresse_entreprise` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `zipcode_entreprise` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
@@ -100,7 +100,8 @@ CREATE TABLE `entreprise` (
 
 INSERT INTO `entreprise` (`ID_Entreprise`, `name_entreprise`, `email_entreprise`, `password_entreprise`, `siretnumber_entreprise`, `adresse_entreprise`, `zipcode_entreprise`, `city_entreprise`, `Image_entreprise`) VALUES
 (1, 'LunaTech Solutions', 'LunaTech@gmail.com', 'kamini43', '28859301929402', '8 Rue de Rivoli', '75001', 'Paris', 'img.jpg'),
-(2, 'Phoenix Consulting and Design', 'PhoenixCo@yahoo.com', 'MarlyGomont23', '12279402390923', '25 avenue du Général de Gaulle', '69110', 'Lyon', 'img.jpg');
+(2, 'Phoenix Consulting and Design', 'PhoenixCo@yahoo.com', 'MarlyGomont23', '12279402390923', '25 avenue du Général de Gaulle', '69110', 'Lyon', 'img.jpg'),
+(3, 'Gucci', 'Gucci-mail@mail.com', '$2y$10$LB2/cvG6..sT26fPkjFPleCkjpkHtSKVij1Q49bFCmv1IXQjtzFf2', '24279402390923', '210, rue inconnue', '21456', 'Menfou', NULL);
 
 -- --------------------------------------------------------
 
@@ -133,12 +134,22 @@ INSERT INTO `modedetransport` (`id_modedetransport`, `Type_modedetransport`) VAL
 CREATE TABLE `trajet` (
   `id_trajet` int NOT NULL,
   `date_trajet` date DEFAULT NULL,
-  `distance_trajet` float(3,2) DEFAULT NULL,
+  `distance_trajet` int DEFAULT NULL,
   `traveltime_trajet` time DEFAULT NULL,
   `image_trajet` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `id_modedetransport` int NOT NULL,
   `id_utilisateur` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `trajet`
+--
+
+INSERT INTO `trajet` (`id_trajet`, `date_trajet`, `distance_trajet`, `traveltime_trajet`, `image_trajet`, `id_modedetransport`, `id_utilisateur`) VALUES
+(1, '2032-01-04', 15, '00:00:05', NULL, 1, 15),
+(2, '2032-01-04', 15, '00:00:05', NULL, 1, 15),
+(3, '1995-01-12', 15, '00:00:05', NULL, 2, 15),
+(4, '2024-01-25', 7, '00:00:10', NULL, 1, 15);
 
 -- --------------------------------------------------------
 
@@ -156,24 +167,25 @@ CREATE TABLE `utilisateur` (
   `password_utilisateur` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `description_utilisateur` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `Image_utilisateur` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ID_Entreprise` int NOT NULL
+  `ID_Entreprise` int NOT NULL,
+  `user_validate` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `utilisateur`
 --
 
-INSERT INTO `utilisateur` (`id_utilisateur`, `firstname_utilisateur`, `lastname_utilisateur`, `nickname_utilisateur`, `birthdate_utilisateur`, `email_utilisateur`, `password_utilisateur`, `description_utilisateur`, `Image_utilisateur`, `ID_Entreprise`) VALUES
-(1, 'John', 'Smith', 'Ace', '1995-12-03', 'johnsmith123@gmail.com', 'DragonFire789!', 'Un aventurier intrépide', 'img.jpg', 1),
-(2, 'Emily', 'Johnson', 'Dottie', '1988-05-11', 'emilyjohnson334@gmail.com', 'SecretAgent007$', 'Une danseuse étoile', 'img.jpg', 1),
-(3, 'Michael', 'Davis', 'Sparky', '1979-05-21', 'michoudavis@yahoo.com', 'Wonderland123*', 'Un intellectuel érudit', 'img.jpg', 2),
-(4, 'Sophia', 'Anderson', 'Skipper', '2001-03-04', 'sophieanderson44@yahoo.com', 'GalaxyQuest456#', 'Une athlète olympique', 'img.jpg', 1),
-(5, 'William', 'Thompson', 'Buzzy', '1993-07-16', 'willthom@gmail.com', 'PirateAdventure!', 'Un champion de boxe', 'img.jpg', 2),
-(6, 'Olivia', 'Martinez', 'Scooter', '1965-12-29', 'oliviamartinez13@yahoo.com', 'MagicSpell789$', 'Une scientifique renommée', 'img.jpg', 2),
-(9, 'Florian', 'Malet', 'Zake', '2003-03-04', 'stephe76bs4@outlook.fr', '$2y$10$RR..aQkOcDpyS3Wpwcb5KuzhDcMSFyG6axHgRm296Diycdu.ETpHO', NULL, NULL, 1),
-(12, 'Florian', 'Malet', 'Zake', '2003-03-04', 'stephe76bs8@outlook.fr', '$2y$10$1wyhd9em73bwIj.hiqr4IeHur2NFmbT/OQDzIySOZ/dFii1dPSB1C', NULL, NULL, 1),
-(14, 'Richard', 'Papillon', 'Shox', '1994-04-25', 'papillon.richard@csgo.fr', '$2y$10$SNQRl7Wsg0bpclatf3.sk.94M4x0RQNGc/I2h4yNicyELW0bMFv4.', NULL, NULL, 1),
-(15, 'dzq', 'dzq', 'dzq', '2003-03-04', 'dzqdzq', '$2y$10$A4AHo18IYi1uUn5F50xbbeUcNEexv0X7.5wh3Pf/Ur2fBiO2qmggi', NULL, NULL, 1);
+INSERT INTO `utilisateur` (`id_utilisateur`, `firstname_utilisateur`, `lastname_utilisateur`, `nickname_utilisateur`, `birthdate_utilisateur`, `email_utilisateur`, `password_utilisateur`, `description_utilisateur`, `Image_utilisateur`, `ID_Entreprise`, `user_validate`) VALUES
+(1, 'John', 'Smith', 'Ace', '1995-12-03', 'johnsmith123@gmail.com', 'DragonFire789!', 'Un aventurier intrépide', 'img.jpg', 1, 0),
+(2, 'Emily', 'Johnson', 'Dottie', '1988-05-11', 'emilyjohnson334@gmail.com', 'SecretAgent007$', 'Une danseuse étoile', 'img.jpg', 1, 0),
+(3, 'Michael', 'Davis', 'Sparky', '1979-05-21', 'michoudavis@yahoo.com', 'Wonderland123*', 'Un intellectuel érudit', 'img.jpg', 2, 0),
+(4, 'Sophia', 'Anderson', 'Skipper', '2001-03-04', 'sophieanderson44@yahoo.com', 'GalaxyQuest456#', 'Une athlète olympique', 'img.jpg', 1, 0),
+(5, 'William', 'Thompson', 'Buzzy', '1993-07-16', 'willthom@gmail.com', 'PirateAdventure!', 'Un champion de boxe', 'img.jpg', 2, 0),
+(6, 'Olivia', 'Martinez', 'Scooter', '1965-12-29', 'oliviamartinez13@yahoo.com', 'MagicSpell789$', 'Une scientifique renommée', 'img.jpg', 2, 0),
+(9, 'Florian', 'Malet', 'Zake', '2003-03-04', 'stephe76bs4@outlook.fr', '$2y$10$RR..aQkOcDpyS3Wpwcb5KuzhDcMSFyG6axHgRm296Diycdu.ETpHO', NULL, NULL, 1, 0),
+(12, 'Florian', 'Malet', 'Zake', '2003-03-04', 'stephe76bs8@outlook.fr', '$2y$10$1wyhd9em73bwIj.hiqr4IeHur2NFmbT/OQDzIySOZ/dFii1dPSB1C', NULL, NULL, 1, 0),
+(14, 'Richard', 'Papillon', 'Shox', '1994-04-25', 'papillon.richard@csgo.fr', '$2y$10$SNQRl7Wsg0bpclatf3.sk.94M4x0RQNGc/I2h4yNicyELW0bMFv4.', NULL, NULL, 1, 0),
+(15, 'dzq', 'dzq', 'dzq', '2003-03-04', 'dzqdzq', '$2y$10$A4AHo18IYi1uUn5F50xbbeUcNEexv0X7.5wh3Pf/Ur2fBiO2qmggi', NULL, NULL, 3, 1);
 
 --
 -- Index pour les tables déchargées
@@ -250,7 +262,7 @@ ALTER TABLE `challengespecial`
 -- AUTO_INCREMENT pour la table `entreprise`
 --
 ALTER TABLE `entreprise`
-  MODIFY `ID_Entreprise` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID_Entreprise` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `modedetransport`
@@ -262,7 +274,7 @@ ALTER TABLE `modedetransport`
 -- AUTO_INCREMENT pour la table `trajet`
 --
 ALTER TABLE `trajet`
-  MODIFY `id_trajet` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_trajet` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `utilisateur`
